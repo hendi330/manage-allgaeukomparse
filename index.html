@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vite App</title>
+  <script>
+    if('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/dist/sw.js', { scope: '/dist/' })
+      })
+    }
+  </script>
+</head>
+
+
+<body>
+
+
+
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
+<!-- <script>
+  function changePage(pagename){
+    let navlinks = document.getElementsByClassName("nav-link");
+    for(let i = 0; i < navlinks.length; i++){
+      if(navlinks[i].classList.contains("active")){
+      navlinks[i].classList.remove("active");
+        console.log(navlinks);
+        
+      }
+    }
+    document.getElementById(pagename + "-link").classList.add("active");
+   console.log(metrue);
+    // page.value =pagename;
+  }
+</script> -->

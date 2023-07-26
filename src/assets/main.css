@@ -1,0 +1,119 @@
+ @import './base.css';
+/*
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 2rem;
+  }
+} */
+.margin-start-0{
+  margin-left: 0 ;
+}
+.no-margin{
+  margin: 0;
+}
+.icon-green{
+  color: #28a745 !important;
+
+}
+.icon-warning{
+  color: #ffc107 !important;
+}
+.mini-button{
+  position: fixed;
+  top:50px; /* adjust to your desired distance from the bottom */
+  right: 40px; /* adjust to your desired distance from the right */
+  z-index: 9999;
+  width:20px;
+  height:20px;
+}
+.hideme{
+  display: none;
+}
+.modal-btn-group button {
+  border-radius: 50px;
+}
+.blue{
+  color: #007bff !important;
+}
+/* @media (min-width: 800px) {
+  .mini-button{
+    display: none;
+  }
+} */
+.select_decision_list_item{
+  /* display: none !important; */
+}
+
+.not-active{
+  display: none !important;
+}
+.list_item{
+  border-bottom-left-radius: 40px !important;
+  border-bottom-right-radius: 40px !important;
+  border :1px solid black !important;
+  border-radius: 40px !important;
+}
+/* .list-group-item:last-child{
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  border-top-width: 1px !important;
+  border-radius: 40px;
+  border :1px solid black !important;
+
+
+}
+.list-group-item:first-child{
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  border :1px solid black !important;
+  border-radius: 40px;
+} */
+.decision-btn-end{
+  border-top-right-radius: 40px !important;
+  border-bottom-right-radius: 40px !important;
+}
+.decision-btn-start{
+  border-top-left-radius: 40px !important;
+  border-bottom-left-radius: 40px !important;
+}
+.pdf-content{
+  line-height:1px;
+  font-size:10px;
+  
+}
+.pdf-content .heading{
+  font-size: 14px;
+  font-weight: bold;
+}
+.infomodal{
+  line-height: 5px;
+  font-size:15px;
+}
