@@ -71,14 +71,13 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Jobs</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(user, index) in userlists.UsersInModal">
                                 <th scope="row">{{index}}</th>
-                                <td>{{ user.personalinfo_firstname }}, {{  user.personalinfo_lastname }}</td>
-                                <td>Jobs: <span v-if="user.komparse">Komparse</span> <span v-if="user.umsetzer">Umsetzer</span> <span v-if="user.service">Service</span><span v-if="user.cook">Koch</span></td>
+                                <td>{{ user.firstname }}, {{  user.lastname }}</td>
+                                
                             
                             </tr>
                             
@@ -100,6 +99,7 @@
     </div>
 </template>
 <script setup>
+
 import { Modal } from 'bootstrap'
 import { defineProps, ref, reactive, onMounted, shallowReactive,defineEmits } from 'vue';
 const props = defineProps(["navbar_space", "content_space"]);
@@ -121,7 +121,8 @@ onMounted(() => {
 });
 function fetch_userlists() {
     console.log("fetching userlists");
-    fetch("http://localhost:5174/userlist/", {
+    // fetch("http://localhost:5174/userlist/", {
+        fetch("https://api.allgaeu-komparsen.de/userlist/", {
         method: "GET",
         headers: { listname: "all", type: "all" }
     })
@@ -151,7 +152,8 @@ async function open_modal(id) {
     modals.userlist.show();
 }
 async function fetch_list(listid) {
-    let response = await fetch("http://localhost:5174/userlist/get/" + listid, {
+    // let response = await fetch("http://localhost:5174/userlist/get/" + listid, {
+        let response = await fetch("https://api.allgaeu-komparsen.de/userlist/get/" + listid, {
         method: "GET",
     })
     if (response.ok) {
@@ -162,11 +164,13 @@ async function fetch_list(listid) {
 }
 
 async function fetch_user_by_id(userid) {
-    let response = await fetch("http://localhost:5174/users/get/" + userid, {
+    // let response = await fetch("http://localhost:5174/users/get/" + userid, {
+        let response = await fetch("https://api.allgaeu-komparsen.de/users/get/" + userid, {
         method: "GET",
     })
     if (response.ok) {
         let data = await response.json();
+        console.log(data);
         return data; // Return the fetched data
     }
 }
@@ -182,7 +186,8 @@ function delete_list(){
     }
     let listid = listId_userInModal.value;
     console.log("delete list");console.log(listid);
-    fetch("http://localhost:5174/userlist/", {
+    // fetch("http://localhost:5174/userlist/", {
+        fetch("https://api.allgaeu-komparsen.de/userlist/", {
         method: "DELETE",
         headers: {id: listid}
     });

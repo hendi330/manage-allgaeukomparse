@@ -53,7 +53,8 @@ const emit = defineEmits(["change-page"]);
 
 function get_total_pages() {
   console.log(currenttype.value);
-  fetch("http://localhost:5174/users/count", {
+  // fetch("http://localhost:5174/users/count", {
+  fetch("https://api.allgaeu-komparsen.de/users/count", {
     method: "GET",
     //headers: {limit : limit.value , page : page.value}
   })
@@ -123,7 +124,8 @@ function next_page() {
 }
 function get_pages_jobFilterd(filterstring){
   
-  fetch("http://localhost:5174/users/countJobs/" + filterstring, {
+  // fetch("http://localhost:5174/users/countJobs/" + filterstring, {
+    fetch("https://api.allgaeu-komparsen.de/users/countJobs/" + filterstring, {
     method: "GET",
     //headers: {limit : limit.value , page : page.value}
   })

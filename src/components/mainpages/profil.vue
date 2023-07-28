@@ -69,7 +69,8 @@ let contentspace = ref(props.content_space)
 let qrcodeval = ref('');
 function generateQRCode(urlInput) {
     let url = urlInput;
-    fetch("http://localhost:5174/users/qrcode/" + url)
+    // fetch("http://localhost:5174/users/qrcode/" + url)
+    fetch("https://api.allgaeu-komparsen.de/users/qrcode/" + url)
         //.then returns a base64string 
         .then(response => response.json())
         .then(data => {
@@ -105,7 +106,8 @@ function downloadQRCode(type) {
 }
 
 function generate_hash_code() {
-    fetch("http://localhost:5174/hash/generate", {
+    // fetch("http://localhost:5174/hash/generate", {
+    fetch("https://api.allgaeu-komparsen.de/hash/generate", {
         method: "POST",
 
     })

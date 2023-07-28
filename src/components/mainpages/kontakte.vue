@@ -68,7 +68,7 @@
                                     <td>
                                         {{ calculate_age(user.birthdate) }}
                                     </td>
-                                    <td :id="user.email">
+                                    <td :id="decode_3times(user.email)" @click="open_email_modal('EmailById',decode_3times(user.email))">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                             class="bi bi-envelope" viewBox="0 0 16 16">
                                             <path
@@ -176,7 +176,7 @@
 
         <hr>
         <div class="btn-group  ">
-            <button class="btn btn-outline-primary" @click="open_email_modal">Mail</button>
+            <button class="btn btn-outline-primary" @click="open_email_modal('selectedUsers')">Mail</button>
             <button @click="delete_users" class="btn btn-outline-primary">Löschen</button>
             <button @click="print_pdf" class="btn btn-outline-primary">PDF</button>
             <button @click="open_create_list_close_canvas" class="btn btn-outline-primary">Liste</button>
@@ -231,10 +231,10 @@
 
                         <div class="row justify-content-between">
                             <div class="col-6">
-                                <img :src="decodeURIComponent(currentUser.clicked.picture1)" style="max-width:200px; max-height:200px;">
+                                <img :src="decodeURIComponent(currentUser.clicked.picture1)" style="max-width:150px; max-height:200px;">
                             </div>
                             <div class="col-6">
-                                <img :src="decodeURIComponent(currentUser.clicked.picture2)" style="max-width:200px; max-height:200px;">
+                                <img :src="decodeURIComponent(currentUser.clicked.picture2)" style="max-width:150px; max-height:200px;">
                             </div>
                             <hr class="my-2">
                         </div>
@@ -522,7 +522,7 @@ let richtexteditor_content = ref("");
 let quill_richtext = ref(null);
 let content_quillEditor = ref('');
 let newContent = ref('');
-
+let emails_for_send_email = ref([]);
 watch(content_quillEditor, newValue => {
     newContent.value = newValue;
 })
@@ -587,7 +587,9 @@ async function fetch_users(page, limit) {
 
    console.log(filter.value);
    let filterObj = { ...filter.value };
-    fetch("http://localhost:5174/users/get_users/" + page + "/" + limit, {
+    // fetch("http://localhost:5174/users/get_users/" + page + "/" + limit, {
+        fetch("https://api.allgaeu-komparsen.de/users/get_users/" + page + "/" + limit, {
+
         method: "POST",
         body: JSON.stringify(filterObj),
         headers: {
@@ -781,7 +783,8 @@ function create_list() {
     for (let i = 0; i < userlist.selected.length; i++) {
         tmp_arr.push(userlist.selected[i]._id);
     }
-    fetch("http://localhost:5174/userlist/", {
+    fetch("https://api.allgaeu-komparsen.de/userlist/", {
+    // fetch("http://localhost:5174/userlist/", {
         method: "POST",
         headers: { users: JSON.stringify(tmp_arr), listname: listname }
     })
@@ -823,7 +826,8 @@ async function open_info_modal(userid) {
 }
 async function fetch_user_by_id(id) {
     try {
-        let response = await fetch("http://localhost:5174/users/get/" + id, {
+        let response = await fetch("https://api.allgaeu-komparsen.de/users/get/" + id, {
+        // let response = await fetch("http://localhost:5174/users/get/" + id, {
             method: "GET",
             //headers: {limit : limit.value , page : page.value}
         });
@@ -853,7 +857,8 @@ function close_userinfo_modal_and_reset() {
 function confirm_user() {
     let id = currentUser.clicked._id;
     try {
-        let response = fetch("http://localhost:5174/users/confirm/" + id, {
+        // let response = fetch("http://localhost:5174/users/confirm/" + id, {
+        let response = fetch("https://api.allgaeu-komparsen.de/users/confirm/" + id, {
             method: "PUT",
             //headers: {limit : limit.value , page : page.value}
         });
@@ -880,7 +885,8 @@ function delete_users() {
     //remove the last comma
     ids = ids.substring(0, ids.length - 1);
     try {
-        let response = fetch("http://localhost:5174/users/delete/" + ids, {
+        let response = fetch("https://api.allgaeu-komparsen.de/users/delete/" + ids, {
+        // let response = fetch("http://localhost:5174/users/delete/" + ids, {
             method: "DELETE",
             //headers: {limit : limit.value , page : page.value}
         });
@@ -953,12 +959,24 @@ function close_email_modal() {
     modals.email.hide();
     nothingOpen.value = true;
 }
-function open_email_modal() {
+function open_email_modal(type ,id="") {
     closeCanvas();
     if (nothingOpen.value) {
         modals.email.show();
+        console.log(modals.email);
         nothingOpen.value = false;
     }
+    if(type=="EmailById"){
+        emails_for_send_email.value.push(id);
+    }
+    else if(type=="selectedUsers"){
+        console.log(userlist.selected);
+        for(let i = 0 ; i < userlist.selected.length ; i++){
+            emails_for_send_email.value.push(userlist.selected[i].email);
+        }
+    }
+    
+
 }
 function toggle_jobfilter(job) {
     let foundInFilter = false;
@@ -1009,7 +1027,8 @@ function fitler_table() {
 async function fetch_filtered_users() {
     let tmp_arr = [];
 
-    await fetch("http://localhost:5174/users/filtered", {
+    await fetch("https://api.allgaeu-komparsen.de/users/filtered", {
+    // await fetch("http://localhost:5174/users/filtered", {
         method: "GET",
         headers: { jobs: JSON.stringify(filterSelect) }
     })
@@ -1085,11 +1104,12 @@ function send_email() {
         console.log();
     });
     console.log(newContent);
-    let tmpemail_addresses = [
-        "hendrik.wilms97@gmail.com"
-    ]
+    //get email adresses from selected users. 
+    //or get email adress by id
+    let tmpemail_addresses = emails_for_send_email.value;
+    
     // console.log(quill_richtext.value.root.innterHtml);
-    console.log(quill_richtext.value);
+    console.log(tmpemail_addresses);
     // let text_for_email = newContent.value;
     let somethingelse ="";
     if (quill_richtext.value && quill_richtext.value.editor) {
@@ -1100,7 +1120,8 @@ function send_email() {
         // let html = quill_richtext.value.clipboard.convert(delta);
         // console.log(html); // Here you have the HTML string
   }
-    fetch("http://localhost:5174/users/send_email", {
+    fetch("https://api.allgaeu-komparsen.de/users/send_email", {
+//   fetch("http://localhost:5174/users/send_email", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -1119,6 +1140,7 @@ function send_email() {
         .catch(error => {
             console.error(error);
         });
+    emails_for_send_email.value = [];
 }
 function use_filter(){
 

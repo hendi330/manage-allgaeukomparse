@@ -99,18 +99,19 @@ async function HTML_to_pdf(userIDS){
       list.appendChild(create_hr_element());
       //decode utf-8 to string
       
-      list.appendChild(create_li_element("Vorname", decodeURIComponent(users[i].personalinfo_firstname)));
-      list.appendChild(create_li_element("Nachname", decodeURIComponent(users[i].personalinfo_lastname)));
-      list.appendChild(create_li_element("Geburtstag", users[i].personalinfo_birthdate));
-      list.appendChild(create_li_element("Telefon", users[i].personalinfo_phonenumber));
-      list.appendChild(create_li_element("EMail", decodeURIComponent(decodeURIComponent(decodeURIComponent(users[i].personalinfo_email)))));
+      list.appendChild(create_li_element("Vorname", decodeURIComponent(users[i].firstname)));
+      list.appendChild(create_li_element("Nachname", decodeURIComponent(users[i].lastname)));
+      list.appendChild(create_li_element("Geburtstag", users[i].birthdate));
+      list.appendChild(create_li_element("Telefon", users[i].phonenumber));
+      list.appendChild(create_li_element("EMail", decodeURIComponent(decodeURIComponent(decodeURIComponent(users[i].email)))));
       list.appendChild(create_li_header_element("AdressInfos"));
       list.appendChild(create_hr_element());
-      list.appendChild(create_li_element("Stadt", decodeURIComponent(users[i].location_city) +", "+ users[i].location_zipcode));
-      list.appendChild(create_li_element("Straße", decodeURIComponent(users[i].location_street) + ", " + users[i].location_housenumber));
-      tmp_div.appendChild(create_img_elemet(users[i].personalinfo_pic));
+      list.appendChild(create_li_element("Stadt", decodeURIComponent(users[i].city) +", "+ users[i].zip));
+      list.appendChild(create_li_element("Straße", decodeURIComponent(users[i].street) + ", " + users[i].housenumber));
+      tmp_div.appendChild(create_img_elemet(decodeURIComponent(users[i].picture1)));
       tmp_div.appendChild(list);
-      tmp_div.appendChild(create_img_elemet(users[i].personalinfo_perso));
+      tmp_div.appendChild(create_img_elemet(decodeURIComponent(users[i].picture2)));
+      console.log(users[i].picture2);
       // let add_to_pdf =tmp_div.cloneNode(true);
       
       main.appendChild(tmp_div.cloneNode(true));
@@ -209,7 +210,8 @@ function create_li_header_element(text){
 }
 async function fetch_user_by_id(id){
    try{
-      let response = await fetch("http://localhost:5174/users/get/" +id, {
+      // let response = await fetch("http://localhost:5174/users/get/" +id, {
+         let response = await fetch("https://api.allgaeu-komparsen.de/users/get/" +id, {
         method: "GET",
         //headers: {limit : limit.value , page : page.value}
       });
