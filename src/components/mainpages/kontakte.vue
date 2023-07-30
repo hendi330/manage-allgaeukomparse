@@ -592,7 +592,8 @@ async function fetch_users(page, limit) {
 
     let filterObj = { ...filter.value };
     console.log(filterObj);
-    if (filterObj == {}) {
+    console.log(filterObj.length);
+    if (filterObj.length==0) {
         console.log("empty");
         fetch("https://api.allgaeu-komparsen.de/users/get_users/" + page + "/" + limit, {
 
