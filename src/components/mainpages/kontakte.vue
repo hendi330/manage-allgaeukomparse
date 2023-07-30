@@ -68,7 +68,8 @@
                                     <td>
                                         {{ calculate_age(user.birthdate) }}
                                     </td>
-                                    <td :id="decode_3times(user.email)" @click="open_email_modal('EmailById',decode_3times(user.email))">
+                                    <td :id="decode_3times(user.email)"
+                                        @click="open_email_modal('EmailById', decode_3times(user.email))">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                             class="bi bi-envelope" viewBox="0 0 16 16">
                                             <path
@@ -231,10 +232,12 @@
 
                         <div class="row justify-content-between">
                             <div class="col-6">
-                                <img :src="decodeURIComponent(currentUser.clicked.picture1)" style="max-width:150px; max-height:200px;">
+                                <img :src="decodeURIComponent(currentUser.clicked.picture1)"
+                                    style="max-width:150px; max-height:200px;">
                             </div>
                             <div class="col-6">
-                                <img :src="decodeURIComponent(currentUser.clicked.picture2)" style="max-width:150px; max-height:200px;">
+                                <img :src="decodeURIComponent(currentUser.clicked.picture2)"
+                                    style="max-width:150px; max-height:200px;">
                             </div>
                             <hr class="my-2">
                         </div>
@@ -246,7 +249,7 @@
                                     calculate_age(currentUser.clicked.birthdate) }}</p>
                                 <p class="infomodal"> Email: {{ decode_3times(currentUser.clicked.email) }}</p>
                                 <p class="infomodal"> Telefon: {{ currentUser.clicked.phone }}</p>
-                                
+
                             </div>
                         </div>
                         <div class="row justify-content-between">
@@ -399,7 +402,7 @@
                                 <div class="col-6">
                                     <select class="form-select" aria-label="Default select example" name="max_cloth_size"
                                         id="max_cloth_size">
-                                        <option value ="" selected="">Alle</option>
+                                        <option value="" selected="">Alle</option>
                                         <option value="XS">XS</option>
                                         <option value="S">S</option>
                                         <option value="M">M</option>
@@ -510,7 +513,7 @@
 <script setup>
 import { computeStyles, offset } from '@popperjs/core';
 import pagination from '../pageparts/pagination.vue';
-import { defineProps, ref, onMounted, reactive, defineEmits, inject, toRef,toRefs, nextTick, watch } from 'vue'
+import { defineProps, ref, onMounted, reactive, defineEmits, inject, toRef, toRefs, nextTick, watch } from 'vue'
 // import { bootstrap } from 'bootstrap';
 import { Modal, Offcanvas } from 'bootstrap'
 import { QuillEditor } from '@vueup/vue-quill'
@@ -527,8 +530,8 @@ watch(content_quillEditor, newValue => {
     newContent.value = newValue;
 })
 // VueFroala.register();
-const props = defineProps(["navbar_space", "content_space", "isMobil","filterArray"]);
-const emits = defineEmits(["print-pdf", "get-user-by-id", 'toggle-list-icon', 'set-filter',"get-filter","set-filterval","reset-filter"]);
+const props = defineProps(["navbar_space", "content_space", "isMobil", "filterArray"]);
+const emits = defineEmits(["print-pdf", "get-user-by-id", 'toggle-list-icon', 'set-filter', "get-filter", "set-filterval", "reset-filter"]);
 let currentSort = ref("lastname");
 let currentSortDir = ref("asc");
 let isMobil = toRef(props, "isMobil");
@@ -566,7 +569,7 @@ let filtermodal = ref(null);
 onMounted(() => {
     console.log("mounted");
     fetch_users("1", "10");
-    
+
     modals.userinfo = new Modal('#userinfo-modal', {});
     modals.offcanvas = new Offcanvas('#offcanvasWithBothOptions', {});
     modals.createList = new Modal('#createlist-modal', {});
@@ -585,36 +588,59 @@ function print_pdf() {
 
 async function fetch_users(page, limit) {
 
-   console.log(filter.value);
-   
-   let filterObj = { ...filter.value };
-   console.log(filterObj);
-    // fetch("http://localhost:5174/users/get_users/" + page + "/" + limit, {
+    console.log(filter.value);
+
+    let filterObj = { ...filter.value };
+    console.log(filterObj);
+    if (filterObj == {}) {
+        console.log("empty");
         fetch("https://api.allgaeu-komparsen.de/users/get_users/" + page + "/" + limit, {
 
-        method: "POST",
-        body: JSON.stringify(filterObj),
-        headers: {
-        "Content-Type": "application/json"
+            method: "POST",
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                userlist.users = [];
+                for (let i = 0; i < data.length; i++) {
+                    data[i].email = decodeURIComponent(data[i].email);
+                    userlist.users.push((data[i]));
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
-        
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            userlist.users = [];
-            for (let i = 0; i < data.length; i++) {
-                data[i].email = decodeURIComponent(data[i].email);
-                userlist.users.push((data[i]));
+    else {
+        console.log("not empty");
+        fetch("https://api.allgaeu-komparsen.de/users/get_users/" + page + "/" + limit, {
 
-
+            method: "POST",
+            body: JSON.stringify(filterObj),
+            headers: {
+                "Content-Type": "application/json"
             }
-            console.log(userlist);
 
         })
-        .catch(error => {
-            console.error(error);
-        });
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                userlist.users = [];
+                for (let i = 0; i < data.length; i++) {
+                    data[i].email = decodeURIComponent(data[i].email);
+                    userlist.users.push((data[i]));
+
+
+                }
+                console.log(userlist);
+
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    // fetch("http://localhost:5174/users/get_users/" + page + "/" + limit, {
+
 }
 function toggle_selected_user_state(event) {
     //element == a tag
@@ -786,7 +812,7 @@ function create_list() {
         tmp_arr.push(userlist.selected[i]._id);
     }
     fetch("https://api.allgaeu-komparsen.de/userlist/", {
-    // fetch("http://localhost:5174/userlist/", {
+        // fetch("http://localhost:5174/userlist/", {
         method: "POST",
         headers: { users: JSON.stringify(tmp_arr), listname: listname }
     })
@@ -829,7 +855,7 @@ async function open_info_modal(userid) {
 async function fetch_user_by_id(id) {
     try {
         let response = await fetch("https://api.allgaeu-komparsen.de/users/get/" + id, {
-        // let response = await fetch("http://localhost:5174/users/get/" + id, {
+            // let response = await fetch("http://localhost:5174/users/get/" + id, {
             method: "GET",
             //headers: {limit : limit.value , page : page.value}
         });
@@ -888,7 +914,7 @@ function delete_users() {
     ids = ids.substring(0, ids.length - 1);
     try {
         let response = fetch("https://api.allgaeu-komparsen.de/users/delete/" + ids, {
-        // let response = fetch("http://localhost:5174/users/delete/" + ids, {
+            // let response = fetch("http://localhost:5174/users/delete/" + ids, {
             method: "DELETE",
             //headers: {limit : limit.value , page : page.value}
         });
@@ -961,23 +987,23 @@ function close_email_modal() {
     modals.email.hide();
     nothingOpen.value = true;
 }
-function open_email_modal(type ,id="") {
+function open_email_modal(type, id = "") {
     closeCanvas();
     if (nothingOpen.value) {
         modals.email.show();
         console.log(modals.email);
         nothingOpen.value = false;
     }
-    if(type=="EmailById"){
+    if (type == "EmailById") {
         emails_for_send_email.value.push(id);
     }
-    else if(type=="selectedUsers"){
+    else if (type == "selectedUsers") {
         console.log(userlist.selected);
-        for(let i = 0 ; i < userlist.selected.length ; i++){
+        for (let i = 0; i < userlist.selected.length; i++) {
             emails_for_send_email.value.push(userlist.selected[i].email);
         }
     }
-    
+
 
 }
 function toggle_jobfilter(job) {
@@ -1007,7 +1033,7 @@ function toggle_jobfilter(job) {
 }
 function resetFilter() {
     nothingOpen.value = true;
-    emits ("reset-filter");
+    emits("reset-filter");
 
 }
 
@@ -1030,7 +1056,7 @@ async function fetch_filtered_users() {
     let tmp_arr = [];
 
     await fetch("https://api.allgaeu-komparsen.de/users/filtered", {
-    // await fetch("http://localhost:5174/users/filtered", {
+        // await fetch("http://localhost:5174/users/filtered", {
         method: "GET",
         headers: { jobs: JSON.stringify(filterSelect) }
     })
@@ -1109,21 +1135,21 @@ function send_email() {
     //get email adresses from selected users. 
     //or get email adress by id
     let tmpemail_addresses = emails_for_send_email.value;
-    
+
     // console.log(quill_richtext.value.root.innterHtml);
     console.log(tmpemail_addresses);
     // let text_for_email = newContent.value;
-    let somethingelse ="";
+    let somethingelse = "";
     if (quill_richtext.value && quill_richtext.value.editor) {
         let quill = quill_richtext.value.editor;
-        somethingelse  = quill.innerHTML;
+        somethingelse = quill.innerHTML;
         // let somethign = quill;
         // let delta = quill.getContents();
         // let html = quill_richtext.value.clipboard.convert(delta);
         // console.log(html); // Here you have the HTML string
-  }
+    }
     fetch("https://api.allgaeu-komparsen.de/users/send_email", {
-//   fetch("http://localhost:5174/users/send_email", {
+        //   fetch("http://localhost:5174/users/send_email", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -1144,7 +1170,7 @@ function send_email() {
         });
     emails_for_send_email.value = [];
 }
-function use_filter(){
+function use_filter() {
 
     let max_size = filtermodal.value.querySelector("#max_size").value;
     let min_size = filtermodal.value.querySelector("#min_size").value;
@@ -1160,49 +1186,49 @@ function use_filter(){
     let extra_infos = filtermodal.value.querySelector("#extra_infos").value;
 
     //check if each variable has a value, if they have add them to a key value array
-    if(max_size != ""){
+    if (max_size != "") {
         console.log("max_size");
         set_filter_value("max_size", max_size);
     }
-    if(min_size != ""){
+    if (min_size != "") {
         console.log("min_size");
         set_filter_value("min_size", min_size);
 
-    }   
-    if(min_cloth_size != ""){
+    }
+    if (min_cloth_size != "") {
         console.log("min_cloth_size");
         set_filter_value("min_cloth_size", min_cloth_size);
 
     }
-    if(max_cloth_size != ""){
+    if (max_cloth_size != "") {
         console.log("max_cloth_size");
         set_filter_value("max_cloth_size", max_cloth_size);
     }
-    if(gender != ""){
+    if (gender != "") {
         console.log("gender");
         set_filter_value("gender", gender);
     }
-    if(min_age != ""){
+    if (min_age != "") {
         console.log("min_age");
         set_filter_value("min_age", min_age);
     }
-    if(max_age != ""){
+    if (max_age != "") {
         console.log("max_age");
         set_filter_value("max_age", max_age);
     }
-    if(city != ""){
+    if (city != "") {
         console.log("city");
         set_filter_value("city", city);
     }
-    if(zip != ""){
+    if (zip != "") {
         console.log("zip");
         set_filter_value("zip", zip);
     }
-    if(vaccinated != ""){
+    if (vaccinated != "") {
         console.log("vaccinated");
         set_filter_value("vaccinated", vaccinated);
     }
-    if(extra_infos != ""){
+    if (extra_infos != "") {
         console.log("extra infos");
         set_filter_value("extra_infos", extra_infos);
     }
@@ -1210,13 +1236,13 @@ function use_filter(){
     close_filter_modal();
     fetch_users("1", "10");
 }
-function set_filter(filter){
+function set_filter(filter) {
     emits("set-filter", filter);
 }
-function set_filter_value(key, value){
+function set_filter_value(key, value) {
     emits("set-filterval", key, value);
 }
-function get_filter(){
+function get_filter() {
     let bla = emits("get-filter");
     console.log(bla);
     return bla;
