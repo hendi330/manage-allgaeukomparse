@@ -568,7 +568,7 @@ let modals = reactive({
 let filtermodal = ref(null);
 onMounted(() => {
     console.log("mounted");
-    fetch_users("1", "10");
+    fetch_users("1", "50");
 
     modals.userinfo = new Modal('#userinfo-modal', {});
     modals.offcanvas = new Offcanvas('#offcanvasWithBothOptions', {});

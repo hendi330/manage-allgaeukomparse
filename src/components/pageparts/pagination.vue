@@ -28,7 +28,7 @@ import { defineProps, ref, defineEmits, watch, toRef } from 'vue'
 
 // let currenttype = ref(props.current_type);
 let currenttype = toRef("1");
-let limit = ref(10);
+let limit = ref(50);
 let active_page = ref(1);
 let total_users = ref(1);
 let total_pages = ref(1);
