@@ -586,7 +586,9 @@ function print_pdf() {
 async function fetch_users(page, limit) {
 
    console.log(filter.value);
+   
    let filterObj = { ...filter.value };
+   console.log(filterObj);
     // fetch("http://localhost:5174/users/get_users/" + page + "/" + limit, {
         fetch("https://api.allgaeu-komparsen.de/users/get_users/" + page + "/" + limit, {
 
