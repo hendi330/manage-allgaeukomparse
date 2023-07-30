@@ -593,28 +593,11 @@ async function fetch_users(page, limit) {
     let filterObj = { ...filter.value };
     console.log(filterObj);
     console.log(filterObj.value);
-    if (filterObj ) {
-        console.log("empty");
-        fetch("https://api.allgaeu-komparsen.de/users/get_users/" + page + "/" + limit, {
-
-            method: "POST",
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                userlist.users = [];
-                for (let i = 0; i < data.length; i++) {
-                    data[i].email = decodeURIComponent(data[i].email);
-                    userlist.users.push((data[i]));
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-    else {
-        console.log("not empty");
-        fetch("https://api.allgaeu-komparsen.de/users/get_users/" + page + "/" + limit, {
+    //add page and limit to filterObj
+    filterObj.page = page;
+    filterObj.limit = limit;
+    console.log(filterObj);
+        fetch("https://api.allgaeu-komparsen.de/users/get_users", {
 
             method: "POST",
             body: JSON.stringify(filterObj),
@@ -639,7 +622,7 @@ async function fetch_users(page, limit) {
             .catch(error => {
                 console.error(error);
             });
-    }
+    
     // fetch("http://localhost:5174/users/get_users/" + page + "/" + limit, {
 
 }
