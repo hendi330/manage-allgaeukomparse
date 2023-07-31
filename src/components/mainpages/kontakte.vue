@@ -232,11 +232,11 @@
 
                         <div class="row justify-content-between">
                             <div class="col-6">
-                                <img :src="decodeURIComponent(currentUser.clicked.picture1)"
+                                <img :src="'data:image/jpeg;base64,' +decodeURIComponent(currentUser.clicked.picture1.bytes)"
                                     style="max-width:150px; max-height:200px;">
                             </div>
                             <div class="col-6">
-                                <img :src="decodeURIComponent(currentUser.clicked.picture2)"
+                                <img :src="currentUser.clicked.picture2"
                                     style="max-width:150px; max-height:200px;">
                             </div>
                             <hr class="my-2">
