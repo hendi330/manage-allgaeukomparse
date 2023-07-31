@@ -1236,7 +1236,7 @@ function get_filter() {
 function unpack(picture){
     console.log(picture);
 
-    if(picture == -1){
+    if(picture == -1 && picture == undefined){
         console.log("-1");
         return "";
     }
