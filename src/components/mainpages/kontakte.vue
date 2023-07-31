@@ -232,11 +232,11 @@
 
                         <div class="row justify-content-between">
                             <div class="col-6">
-                                <img :src="'data:image/jpeg;base64,' +decodeURIComponent(currentUser.clicked.picture1)"
+                                <img :src="unpack(currentUser.clicked.picture1)"
                                     style="max-width:150px; max-height:200px;">
                             </div>
                             <div class="col-6">
-                                <img :src="'data:image/jpeg;base64,'+currentUser.clicked.picture2.byte"
+                                <img :src="unpack(currentUser.clicked.picture2)"
                                     style="max-width:150px; max-height:200px;">
                             </div>
                             <hr class="my-2">
@@ -1232,5 +1232,13 @@ function get_filter() {
     let bla = emits("get-filter");
     console.log(bla);
     return bla;
+}
+function unpack(picture){
+    if(picture == -1){
+        return "";
+    }
+    else {
+        return "data:image/jpeg;base64," + decodeURIComponent(picture);
+    }
 }
 </script>
