@@ -1238,7 +1238,7 @@ function unpack(picture){
         return "";
     }
     else {
-        return "data:image/jpeg;base64," + decodeURIComponent(picture);
+        return "data:image/jpeg;base64," + decodeURIComponent(picture.byte);
     }
 }
 </script>
