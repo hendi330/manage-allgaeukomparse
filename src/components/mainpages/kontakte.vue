@@ -232,11 +232,11 @@
 
                         <div class="row justify-content-between">
                             <div class="col-6">
-                                <img :src="'data:image/jpeg;base64,' +decodeURIComponent(currentUser.clicked.picture1.bytes)"
+                                <img :src="'data:image/jpeg;base64,' +decodeURIComponent(currentUser.clicked.picture1)"
                                     style="max-width:150px; max-height:200px;">
                             </div>
                             <div class="col-6">
-                                <img :src="currentUser.clicked.picture2"
+                                <img :src="'data:image/jpeg;base64,'+currentUser.clicked.picture2"
                                     style="max-width:150px; max-height:200px;">
                             </div>
                             <hr class="my-2">
@@ -928,6 +928,8 @@ function open_userinfo_modal() {
         modals.userinfo.show();
         nothingOpen.value = false;
     }
+    console.log("userinfomodal");
+    console.log(currentUser.clicked);
 }
 function close_userinfo_modal() {
     modals.userinfo.hide();
