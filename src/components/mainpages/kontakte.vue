@@ -232,7 +232,7 @@
 
                         <div class="row justify-content-between">
                             <div class="col-6">
-                                <img :src="'data:image/jpeg;base64,' +decodeURIComponent(currentUser.clicked.picture1)"
+                                <img :src="'data:image/jpeg;base64,' +decodeURIComponent(currentUser.clicked.picture1.byte)"
                                     style="max-width:150px; max-height:200px;">
                             </div>
                             <div class="col-6">
