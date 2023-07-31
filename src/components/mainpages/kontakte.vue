@@ -1234,10 +1234,14 @@ function get_filter() {
     return bla;
 }
 function unpack(picture){
+    console.log(picture);
+
     if(picture == -1){
+        console.log("-1");
         return "";
     }
     else {
+        console.log("not 1");
         return "data:image/jpeg;base64," + decodeURIComponent(picture.byte);
     }
 }
