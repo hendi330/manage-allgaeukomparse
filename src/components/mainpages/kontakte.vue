@@ -112,7 +112,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12 col-lg-9">
-                        <pagination @change-page="change_userlist_page" v-if="!check_for_filter()" />
+                        <pagination @change-page="change_userlist_page" @get-total-pages ="get_total_pages" :total_users= "total_users" v-if="!check_for_filter()" />
                     </div>
                 </div>
 
@@ -520,11 +520,13 @@ import { QuillEditor } from '@vueup/vue-quill'
 
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
-
+let filterchanged = ref("");
 let richtexteditor_content = ref("");
 let quill_richtext = ref(null);
 let content_quillEditor = ref('');
 let newContent = ref('');
+// let limit = ref("");
+let total_users = ref(1);
 let emails_for_send_email = ref([]);
 watch(content_quillEditor, newValue => {
     newContent.value = newValue;
@@ -588,12 +590,13 @@ function print_pdf() {
 
 async function fetch_users(page, limit) {
 
-    console.log(filter.value);
+    // console.log(filter.value);
 
     let filterObj = { ...filter.value };
-    console.log(filterObj);
-    console.log(filterObj.value);
+    // console.log(filterObj);
+    // console.log(filterObj.value);
     //add page and limit to filterObj
+
     filterObj.page = page;
     filterObj.limit = limit;
     console.log(filterObj);
@@ -1220,7 +1223,8 @@ function use_filter() {
     }
     console.log(filter.value);
     close_filter_modal();
-    fetch_users("1", "10");
+    fetch_users("1", "50");
+    get_total_pages();
 }
 function set_filter(filter) {
     emits("set-filter", filter);
@@ -1244,5 +1248,38 @@ function unpack(picture){
         console.log("not 1");
         return "data:image/jpeg;base64," + decodeURIComponent(picture.byte);
     }
+}
+ function get_total_pages() {
+  console.log("get total pages");
+  
+  let filterObj = { ...filter.value };
+  console.log(filterObj);
+//   console.log(filter.value);
+  // fetch("http://localhost:5174/users/count", {
+   fetch("https://api.allgaeu-komparsen.de/users/count", {
+
+    method: "POST",
+    body: JSON.stringify(filterObj),
+    headers: {
+      "Content-Type": "application/json"
+    }
+
+  })
+    .then(response => response.json())
+    .then(data => {
+        // return data.count;
+      console.log(data);
+      // convert data into number
+
+      total_users.value = data.count;
+      console.log(total_users.value);
+    //   total_pages.value = Math.ceil(total_users.value / limit.value);
+    //   console.log(total_pages.value);
+      // console.log(userlist);
+      // return tmp_arr;
+    })
+    .catch(error => {
+      console.error(error);
+    });
 }
 </script>
